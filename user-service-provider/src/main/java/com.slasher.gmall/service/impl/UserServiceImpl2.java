@@ -12,12 +12,11 @@ package com.slasher.gmall.service.impl;
 
 import com.slasher.gmall.bean.UserAddress;
 import com.slasher.gmall.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl2 implements UserService{
 
     /**
      * 获取用户收货地址
@@ -27,14 +26,14 @@ public class UserServiceImpl implements UserService{
      */
     @Override
     public List<UserAddress> getUserAddressList(String userId) {
-        System.out.println("userServiceImpl******* old ******");
+        System.out.println("userServiceImpl******* New ******");
         UserAddress address1 = new UserAddress(1,"天通苑北1区","1","老王","010-110","Y");
         UserAddress address2 = new UserAddress(2,"天通苑北2区","1","老李","010-110","N");
-        /*try {
+        try {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
+        }
         System.out.println("**********userService被调用了*************");
         return Arrays.asList(address1,address2);
     }

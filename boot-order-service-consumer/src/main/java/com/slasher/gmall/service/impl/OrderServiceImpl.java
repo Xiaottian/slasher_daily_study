@@ -10,6 +10,7 @@
 
 package com.slasher.gmall.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.slasher.gmall.bean.UserAddress;
 import com.slasher.gmall.service.OrderService;
 import com.slasher.gmall.service.UserService;
@@ -27,7 +28,7 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    @Autowired
+    @Reference(url = "127.0.0.1:20880") //dubbo直连，不需要注册中心。面试重点
     UserService userService;
     /**
      * 初始化订单
@@ -35,14 +36,11 @@ public class OrderServiceImpl implements OrderService {
      * @param userId
      */
     @Override
-    public void initOrder(String userId) {
+    public List<UserAddress> initOrder(String userId) {
 
         System.out.println("用户id," + userId);
         // 1.查询用户的收货地址
         List<UserAddress> addressList = userService.getUserAddressList(userId);
-        System.out.println(addressList);
-        for (UserAddress userAddress : addressList) {
-            System.out.println(userAddress.getUserAddress());
-        }
+        return addressList;
     }
 }
