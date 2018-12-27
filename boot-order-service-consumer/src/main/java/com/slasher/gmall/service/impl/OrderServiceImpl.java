@@ -11,12 +11,14 @@
 package com.slasher.gmall.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.slasher.gmall.bean.UserAddress;
 import com.slasher.gmall.service.OrderService;
 import com.slasher.gmall.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,13 +30,14 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    @Reference(url = "127.0.0.1:20880") //dubbo直连，不需要注册中心。面试重点
+    @Reference(loadbalance = "random") //reference中配置 url属性的时候是 dubbo直连的方式，不需要注册中心。面试重点
     UserService userService;
     /**
      * 初始化订单
      *
      * @param userId
      */
+    @HystrixCommand(fallbackMethod = "hello")
     @Override
     public List<UserAddress> initOrder(String userId) {
 
@@ -42,5 +45,10 @@ public class OrderServiceImpl implements OrderService {
         // 1.查询用户的收货地址
         List<UserAddress> addressList = userService.getUserAddressList(userId);
         return addressList;
+    }
+
+    public List<UserAddress> hello(String userId) {
+
+        return Arrays.asList(new UserAddress(10,"测试地址","1","测试","测试","Y"));
     }
 }

@@ -11,6 +11,7 @@
 package com.slasher.gmall.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.slasher.gmall.bean.UserAddress;
 import com.slasher.gmall.service.UserService;
 import org.springframework.stereotype.Component;
@@ -29,10 +30,15 @@ public class UserServiceImpl implements UserService{
      * @param userId
      * @return
      */
+    @HystrixCommand //hystrix代理其容错异常
     @Override
     public List<UserAddress> getUserAddressList(String userId) {
+        System.out.println("UserServiceImpl........3.....");
         UserAddress address1 = new UserAddress(1,"天通苑北1区","1","老王","010-110","Y");
         UserAddress address2 = new UserAddress(2,"天通苑北2区","1","老李","010-110","N");
+        if(Math.random()>0.5){
+            throw new RuntimeException();
+        }
         return Arrays.asList(address1,address2);
     }
 }
